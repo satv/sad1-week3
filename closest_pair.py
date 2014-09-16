@@ -19,6 +19,7 @@ class Pair:
 
 def parse_data():
 	data = sys.stdin.read().splitlines()
+	data = [d.strip() for d in data] #remove white space to add support for files with white space after NODE_COORD_SECTION
 	try:
 		starting_index = data.index("NODE_COORD_SECTION") + 1
 	except ValueError:
@@ -69,32 +70,23 @@ def divide_and_conquer(p_x, p_y):
 	minimum_pair_r = divide_and_conquer(r_x, r_y)
 	minimum_pair = smallest_pair(minimum_pair_q, minimum_pair_r)
 	d = minimum_pair.distance
+	L_x = (q_x[-1].x + r_x[0].x)/2.0
 
-	L = q_x[len(q_x)-1]
 	S = []
-	
-	for point in q_y:
-		if math.fabs(L.x - point.x) < d:
+	for point in p_y:
+		if abs(L_x-point.x) < d:
 			S.append(point)
 
-	for point in r_y:
-		if math.fabs(L.x - point.x) < d:
-			S.append(point)
-
-	S = sorted(S, key=attrgetter('y')) 
-
-	for counter, point1 in enumerate(S):
-		for i in range(counter, counter + 15):
+	for index, p1 in enumerate(S):
+		for i in range(index+1, index + 15):
 			try:
-				point2 = S[i]
+				p2 = S[i]
 			except IndexError:
 				break
-			
-			distance = point1.distance_to(point2)
+			distance = p1.distance_to(p2)
 			if distance < d:
-				minimum_pair = Pair(point1, point2)
+				minimum_pair = Pair(p1, p2)
 				d = minimum_pair.distance
-
 	return minimum_pair
 
 def brute_force(points):
@@ -113,7 +105,8 @@ def brute_force(points):
 points = parse_data()
 px, py = sort_points(points) 
 result = divide_and_conquer(px, py)
-print result.p1.id, result.p2.id, result.distance
+
+print len(px), result.distance
 
 
 				
