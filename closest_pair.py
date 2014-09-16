@@ -106,7 +106,7 @@ points = parse_data()
 px, py = sort_points(points) 
 result = divide_and_conquer(px, py)
 
-print len(px), result.distance
+print result.p1.id, result.p2.id, result.distance
 
 
 				
