@@ -90,7 +90,6 @@ def divide_and_conquer(p_x, p_y):
 	return minimum_pair
 
 def brute_force(points):
-	current_minimum = float('inf') 
 	minimum_pair = Pair(Point('init1', float('inf'), float('inf')), Point('init2', 0.0, 0.0))
 	for p1 in points:
 		for p2 in points:
@@ -101,12 +100,8 @@ def brute_force(points):
 
 
 # DOING STUFF!
-#points = [Point(0,-2,1), Point(1,-1,2), Point(2,1,2), Point(3,2,1)]
 points = parse_data()
 px, py = sort_points(points) 
 result = divide_and_conquer(px, py)
 
-print result.p1.id, result.p2.id, result.distance
-
-
-				
+print result.p1.id, result.p2.id, result.distance				
