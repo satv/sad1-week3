@@ -63,30 +63,25 @@ def divide_and_conquer(p_x, p_y):
 	middle_index = len(p_x)/2
 	q_x = p_x[:middle_index]
 	q_y = subset_sorted_by_y(q_x, p_y)
-	r_x = p_x[middle_index+1:]
-	r_y = subset_sorted_by_y(q_x, p_y)
+	r_x = p_x[middle_index:]
+	r_y = subset_sorted_by_y(r_x, p_y)
 
 	minimum_pair_q = divide_and_conquer(q_x, q_y)
 	minimum_pair_r = divide_and_conquer(r_x, r_y)
+
 	minimum_pair = smallest_pair(minimum_pair_q, minimum_pair_r)
 	d = minimum_pair.distance
 	L_x = (q_x[-1].x + r_x[0].x)/2.0
-
+	
 	S = []
 	for point in p_y:
 		if abs(L_x-point.x) < d:
 			S.append(point)
 
-	for index, p1 in enumerate(S):
-		for i in range(index+1, index + 15):
-			try:
-				p2 = S[i]
-			except IndexError:
-				break
-			distance = p1.distance_to(p2)
-			if distance < d:
-				minimum_pair = Pair(p1, p2)
-				d = minimum_pair.distance
+	for i, p1 in enumerate(S):
+		for j in range(i+1, min(len(S), i+15)):
+			p2 = S[j]
+			minimum_pair = smallest_pair(Pair(p1,p2),minimum_pair)
 	return minimum_pair
 
 def brute_force(points):
@@ -98,10 +93,9 @@ def brute_force(points):
 				minimum_pair = smallest_pair(current_pair, minimum_pair)
 	return minimum_pair
 
-
 # DOING STUFF!
 points = parse_data()
 px, py = sort_points(points) 
 result = divide_and_conquer(px, py)
 
-print result.p1.id, result.p2.id, result.distance				
+print result.p1.id, result.p2.id, result.distance
